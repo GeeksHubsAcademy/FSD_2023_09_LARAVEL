@@ -40,5 +40,27 @@ class UserSeeder extends Seeder
                 'role' => "super_admin"
             ]
         );
+
+        // DB::table('users')->insert(
+        //     [
+        //         [
+        //             'name' => Str::random(10),
+        //             'email' => 'superadmin@superadmin.com',
+        //             'password' => Hash::make('password'),
+        //             'role' => "super_admin"
+        //         ], 
+        //         [
+        //             'name' => Str::random(10),
+        //             'email' => 'admin@admin.com',
+        //             'password' => Hash::make('password'),
+        //             'role' => "admin"
+        //         ],
+        //         [
+        //             'name' => Str::random(10),
+        //             'email' => 'user@user.com',
+        //             'password' => Hash::make('password'),
+        //         ]
+        //     ]
+        // );
     }
 }
