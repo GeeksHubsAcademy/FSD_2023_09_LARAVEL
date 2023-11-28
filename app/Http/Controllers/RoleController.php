@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
     public function createRole(Request $request) {
+        Log::info('Create Role');
         try {
             $name = $request->input('name');
 
@@ -21,13 +23,17 @@ class RoleController extends Controller
             //     ]
             // );
 
-            $newRole = new Role();
+            // $newRole = new Role();
 
-            // $newRole->name = $request->name;
-            // $newRole->name = $request->input('name');
-            $newRole->name = $name;
+            // // $newRole->name = $request->name;
+            // // $newRole->name = $request->input('name');
+            // $newRole->name = $name;
 
-            $newRole->save();
+            // $newRole->save();
+
+            $newRole = Role::create([
+                'name' => $name,
+            ]);
 
             return response()->json(
                 [
@@ -38,6 +44,8 @@ class RoleController extends Controller
                 Response::HTTP_CREATED
             );
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
             return response()->json(
                 [
                     "success" => false,
