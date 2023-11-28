@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,18 +13,27 @@ class RoleController extends Controller
         try {
             $name = $request->input('name');
 
-            // query builder
-            DB::table('roles')->insert(
-                [
-                    'name' => $name,
-                    // 'created_at' ...
-                ]
-            );
+            // // query builder
+            // DB::table('roles')->insert(
+            //     [
+            //         'name' => $name,
+            //         // 'created_at' ...
+            //     ]
+            // );
+
+            $newRole = new Role();
+
+            // $newRole->name = $request->name;
+            // $newRole->name = $request->input('name');
+            $newRole->name = $name;
+
+            $newRole->save();
 
             return response()->json(
                 [
                     "success" => true,
-                    "message" => "Role created"
+                    "message" => "Role created",
+                    "data" => $newRole
                 ],
                 Response::HTTP_CREATED
             );
