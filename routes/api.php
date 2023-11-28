@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,3 +32,9 @@ Route::get('/api', function(Request $request) {
         Response::HTTP_OK //code status 200
     );
 });
+
+// CRUD ROLES
+Route::post('/roles', [RoleController::class, 'createRole']);
+Route::get('/roles', [RoleController::class, 'getAllRoles']);
+Route::put('/roles/{id}', [RoleController::class, 'updateRoleById']);
+Route::delete('/roles/{id}', [RoleController::class, 'deleteRoleById']);
