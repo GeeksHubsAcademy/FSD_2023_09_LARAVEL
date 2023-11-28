@@ -92,6 +92,28 @@ class RoleController extends Controller
     }
 
     public function deleteRoleById(Request $request, $id) {
-        return 'Delete role by id: '.$id;
+        try {
+            $deleteRole = Role::destroy($id);
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Role deleted",
+                    "data" => $deleteRole
+                ],
+                Response::HTTP_OK
+            ); 
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Error deleting role by id"
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
