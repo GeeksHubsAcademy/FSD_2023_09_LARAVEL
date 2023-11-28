@@ -60,7 +60,31 @@ class RoleController extends Controller
     }
 
     public function getAllRoles(Request $request) {
-        return 'Get All roles';
+        try {
+            $roles = Role::query()->get();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Roles retrieving",
+                    "data" => $roles
+                ],
+                Response::HTTP_OK
+            );
+
+
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Error retrieving roles"
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     public function updateRoleById(Request $request, $id) {
