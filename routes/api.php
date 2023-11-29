@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,7 @@ Route::post('/roles', [RoleController::class, 'createRole']);
 Route::get('/roles', [RoleController::class, 'getAllRoles']);
 Route::put('/roles/{id}', [RoleController::class, 'updateRoleById']);
 Route::delete('/roles/{id}', [RoleController::class, 'deleteRoleById']);
+
+// AUTH
+Route::post('/register', [AuthController::class, 'register']);
+
