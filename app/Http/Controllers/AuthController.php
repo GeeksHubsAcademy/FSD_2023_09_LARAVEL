@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -106,12 +107,12 @@ class AuthController extends Controller
             $password = $request->input('password');
 
             $user = User::query()->where('email', $email)->first();
-            
+
             // Validamos si el usuario existe
             if (!$user) {
                 return response(
                     [
-                        "success" => false, 
+                        "success" => false,
                         "message" => "Email or password are invalid 1"
                     ],
                     Response::HTTP_NOT_FOUND
@@ -152,5 +153,36 @@ class AuthController extends Controller
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    public function profile(Request $request)
+    {
+        $user = auth()->user();
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "User",
+                "data" => $user
+            ],
+            Response::HTTP_OK
+        );
+    }
+
+    public function logout(Request $request)
+    {
+        $accessToken = $request->bearerToken();
+        // Get access token from database
+        $token = PersonalAccessToken::findToken($accessToken);
+        // Revoke token
+        $token->delete();
+        
+        return response(
+            [
+                "success" => true,
+                "message" => "Logout successfully"
+            ],
+            Response::HTTP_OK
+        );
     }
 }
