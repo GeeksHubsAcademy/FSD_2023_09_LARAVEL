@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
-    public function createRole(Request $request) {
+    public function createRole(Request $request)
+    {
         Log::info('Create Role');
         try {
             $name = $request->input('name');
@@ -59,7 +60,8 @@ class RoleController extends Controller
         return 'Create Role';
     }
 
-    public function getAllRoles(Request $request) {
+    public function getAllRoles(Request $request)
+    {
         try {
             $roles = Role::query()->get();
 
@@ -71,9 +73,6 @@ class RoleController extends Controller
                 ],
                 Response::HTTP_OK
             );
-
-
-
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
@@ -87,11 +86,53 @@ class RoleController extends Controller
         }
     }
 
-    public function updateRoleById(Request $request, $id) {
-        return 'Update roles by id: '.$id;
+    public function updateRoleById(Request $request, $id)
+    {
+        try {
+            $role = Role::query()->find($id);
+
+            if (!$role) {
+                return response()->json(
+                    [
+                        "success" => true,
+                        "message" => "Role doesnt exists"
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $name = $request->input('name');
+
+            if ($request->has('name')) {
+                $role->name = $name;
+            }
+
+            $role->save();
+
+            // $role->update(['name', $name]);
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "message" => "Role updated"
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Error updating roles"
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
-    public function deleteRoleById(Request $request, $id) {
+    public function deleteRoleById(Request $request, $id)
+    {
         try {
             $deleteRole = Role::destroy($id);
 
@@ -102,8 +143,7 @@ class RoleController extends Controller
                     "data" => $deleteRole
                 ],
                 Response::HTTP_OK
-            ); 
-
+            );
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
