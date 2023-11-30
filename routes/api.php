@@ -78,4 +78,14 @@ Route::group([
     Route::get('/users/{id}', [UserController::class, 'getUserByIdWithCreateCourses']);
 });
 
+// COURSES ROUTES
+Route::group([
+    'middleware' => [
+        'auth:sanctum',
+        // 'is_super_admin'
+    ]
+], function () {
+    Route::post('/apply-courses', [CourseController::class, 'applyCourse']);
+});
+
 
