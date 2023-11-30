@@ -75,4 +75,7 @@ Route::group([
     ]
 ], function () {
     Route::get('/courses/{id}', [CourseController::class, 'getCourseByIdWithUserCreator']);
+    Route::get('/users/{id}', [UserController::class, 'getUserByIdWithCreateCourses']);
 });
+
+
