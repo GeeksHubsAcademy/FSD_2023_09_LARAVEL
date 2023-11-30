@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -110,7 +111,7 @@ class AuthController extends Controller
 
             // Validamos si el usuario existe
             if (!$user) {
-                return response(
+                return response()->json(
                     [
                         "success" => false,
                         "message" => "Email or password are invalid 1"
@@ -121,13 +122,15 @@ class AuthController extends Controller
 
             // Validamos la contraseña
             if (!Hash::check($password, $user->password)) {
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "Email or password are invalid 2"
-                    ],
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new Error('Email or password are invalid 2');
+
+                // return response()->json(
+                //     [
+                //         "success" => false,
+                //         "message" => "Email or password are invalid 2"
+                //     ],
+                //     Response::HTTP_NOT_FOUND
+                // );
             }
 
             // creamos token
@@ -144,6 +147,15 @@ class AuthController extends Controller
             );
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
+            if($th->getMessage() === 'Email or password are invalid 2') {
+                return response()->json(
+                    [
+                        "success" => false,
+                        "message" => "Email or password are invalid 2"
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
 
             return response()->json(
                 [
@@ -177,7 +189,7 @@ class AuthController extends Controller
         // Revoke token
         $token->delete();
         
-        return response(
+        return response()->json(
             [
                 "success" => true,
                 "message" => "Logout successfully"

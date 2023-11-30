@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 //     }
 // );
 
-Route::get('/api', function(Request $request) {
+Route::get('/api', function (Request $request) {
     return response()->json(
         [
             "success" => true,
@@ -35,16 +36,32 @@ Route::get('/api', function(Request $request) {
 });
 
 // CRUD ROLES
-Route::post('/roles', [RoleController::class, 'createRole']);
-Route::get('/roles', [RoleController::class, 'getAllRoles']);
-Route::put('/roles/{id}', [RoleController::class, 'updateRoleById']);
-Route::delete('/roles/{id}', [RoleController::class, 'deleteRoleById']);
+Route::group([
+    'middleware' => ['auth:sanctum', 'ejemplo']
+], function () {
+    Route::post('/roles', [RoleController::class, 'createRole']);
+    Route::get('/roles', [RoleController::class, 'getAllRoles']);
+    Route::put('/roles/{id}', [RoleController::class, 'updateRoleById']);
+    Route::delete('/roles/{id}', [RoleController::class, 'deleteRoleById']);
+});
 
 // AUTH
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'profile']);
-Route::middleware('auth:sanctum')->put('/logout', [AuthController::class, 'logout']);
 
+Route::group([
+    'middleware' => ['auth:sanctum', 'ejemplo']
+], function () {
+    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
-
+// SUPER_ADMIN ROUTES
+Route::group([
+    'middleware' => [
+        'auth:sanctum',
+        'is_super_admin'
+    ]
+], function () {
+    Route::get('/users', [UserController::class, 'getAllUsers']);
+});
