@@ -37,7 +37,7 @@ Route::get('/api', function (Request $request) {
 
 // CRUD ROLES
 Route::group([
-    'middleware' => ['auth:sanctum', 'ejemplo']
+    'middleware' => ['auth:sanctum', 'is_super_admin']
 ], function () {
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::get('/roles', [RoleController::class, 'getAllRoles']);
