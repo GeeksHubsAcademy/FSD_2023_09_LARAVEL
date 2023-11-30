@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -64,4 +65,14 @@ Route::group([
     ]
 ], function () {
     Route::get('/users', [UserController::class, 'getAllUsers']);
+});
+
+// SUPER_ADMIN ROUTES
+Route::group([
+    'middleware' => [
+        'auth:sanctum',
+        'is_super_admin'
+    ]
+], function () {
+    Route::get('/courses/{id}', [CourseController::class, 'getCourseByIdWithUserCreator']);
 });
