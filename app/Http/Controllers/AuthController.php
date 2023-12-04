@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Bienvenido;
 use App\Models\User;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +50,13 @@ class AuthController extends Controller
             );
 
             // enviar email de bienvenida
+            // $hola = new Bienvenido(
+            //     [
+            //         "name" => $request->input('name')
+            //     ]
+            // );
+
+            // Mail::to($request->input('email'))->send($hola);
 
             // Devolver una respueta
             return response()->json(
